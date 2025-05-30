@@ -74,6 +74,49 @@ export const constantRoutes = [
       }
     ]
   },
+
+
+// //音乐路由
+//   {
+//     path: '/music',
+//     component: Layout,
+//     hidden: false,
+//     children: [
+//       {
+//         path: 'music',
+//         name: 'Music',
+//         component: () => import('@/views/music/music/index2.vue'),
+//         meta: { title: '音乐管理', icon: 'music' }
+//       }
+//     ]
+//   },
+
+
+
+//音乐路由
+  {
+    path: '/music',
+    component: Layout,
+    name: 'Music',
+    meta: {
+      title: '音乐管理',
+      icon: 'music',
+      roles: ['admin', 'music'] // 可选：权限角色
+    },
+    redirect: '/music/music',
+    children: [
+      {
+        path: 'music',
+        name: 'MusicList',
+        component: () => import('@/views/music/music/index3'),
+        meta: {
+          title: '音乐信息',
+          icon: 'list',
+          roles: ['music:music:list'] // 具体权限标识
+        }
+      },
+    ]
+  },
   {
     path: '/user',
     component: Layout,

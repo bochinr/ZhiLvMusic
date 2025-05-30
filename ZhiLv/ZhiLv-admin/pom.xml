@@ -49,6 +49,12 @@
             <artifactId>ZhiLv-framework</artifactId>
         </dependency>
 
+<!--        &lt;!&ndash; 音乐模块&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.ZhiLv</groupId>-->
+<!--            <artifactId>ZhiLv-Music</artifactId>-->
+<!--        </dependency>-->
+
         <!-- 定时任务-->
         <dependency>
             <groupId>com.ZhiLv</groupId>

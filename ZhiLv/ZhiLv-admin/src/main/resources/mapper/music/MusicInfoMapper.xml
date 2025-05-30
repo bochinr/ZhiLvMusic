@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ZhiLv.Music.mapper.MusicInfoMapper">
+    
+    <resultMap type="MusicInfo" id="MusicInfoResult">
+        <result property="musicId"    column="music_id"    />
+        <result property="title"    column="title"    />
+        <result property="artist"    column="artist"    />
+        <result property="album"    column="album"    />
+        <result property="duration"    column="duration"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="coverUrl"    column="cover_url"    />
+        <result property="uploadUserId"    column="upload_user_id"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="playCount"    column="play_count"    />
+        <result property="status"    column="status"    />
+        <result property="tags"    column="tags"    />
+    </resultMap>
+
+    <sql id="selectMusicInfoVo">
+        select music_id, title, artist, album, duration, file_url, cover_url, upload_user_id, upload_time, play_count, status, tags from music_info
+    </sql>
+
+    <select id="selectMusicInfoList" parameterType="MusicInfo" resultMap="MusicInfoResult">
+        <include refid="selectMusicInfoVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="artist != null  and artist != ''"> and artist like concat('%', #{artist}, '%')</if>
+            <if test="album != null  and album != ''"> and album like concat('%', #{album}, '%')</if>
+            <if test="uploadUserId != null "> and upload_user_id = #{uploadUserId}</if>
+            <if test="playCount != null "> and play_count = #{playCount}</if>
+            <if test="tags != null  and tags != ''"> and tags = #{tags}</if>
+        </where>
+    </select>
+    
+    <select id="selectMusicInfoByMusicId" parameterType="Long" resultMap="MusicInfoResult">
+        <include refid="selectMusicInfoVo"/>
+        where music_id = #{musicId}
+    </select>
+
+    <insert id="insertMusicInfo" parameterType="MusicInfo" useGeneratedKeys="true" keyProperty="musicId">
+        insert into music_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="artist != null and artist != ''">artist,</if>
+            <if test="album != null">album,</if>
+            <if test="duration != null">duration,</if>
+            <if test="fileUrl != null and fileUrl != ''">file_url,</if>
+            <if test="coverUrl != null and coverUrl != ''">cover_url,</if>
+            <if test="uploadUserId != null">upload_user_id,</if>
+            <if test="uploadTime != null">upload_time,</if>
+            <if test="playCount != null">play_count,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="tags != null">tags,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="artist != null and artist != ''">#{artist},</if>
+            <if test="album != null">#{album},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="fileUrl != null and fileUrl != ''">#{fileUrl},</if>
+            <if test="coverUrl != null and coverUrl != ''">#{coverUrl},</if>
+            <if test="uploadUserId != null">#{uploadUserId},</if>
+            <if test="uploadTime != null">#{uploadTime},</if>
+            <if test="playCount != null">#{playCount},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="tags != null">#{tags},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMusicInfo" parameterType="MusicInfo">
+        update music_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="artist != null and artist != ''">artist = #{artist},</if>
+            <if test="album != null">album = #{album},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="fileUrl != null and fileUrl != ''">file_url = #{fileUrl},</if>
+            <if test="coverUrl != null and coverUrl != ''">cover_url = #{coverUrl},</if>
+            <if test="uploadUserId != null">upload_user_id = #{uploadUserId},</if>
+            <if test="uploadTime != null">upload_time = #{uploadTime},</if>
+            <if test="playCount != null">play_count = #{playCount},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="tags != null">tags = #{tags},</if>
+        </trim>
+        where music_id = #{musicId}
+    </update>
+
+    <delete id="deleteMusicInfoByMusicId" parameterType="Long">
+        delete from music_info where music_id = #{musicId}
+    </delete>
+
+    <delete id="deleteMusicInfoByMusicIds" parameterType="String">
+        delete from music_info where music_id in 
+        <foreach item="musicId" collection="array" open="(" separator="," close=")">
+            #{musicId}
+        </foreach>
+    </delete>
+</mapper>
