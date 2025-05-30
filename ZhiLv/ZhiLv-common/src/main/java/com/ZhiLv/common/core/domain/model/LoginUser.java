@@ -89,6 +89,10 @@ public class LoginUser implements UserDetails
         this.permissions = permissions;
     }
 
+    public LoginUser(Long userId, Set<String> menuPermission) {
+
+    }
+
     public Long getUserId()
     {
         return userId;

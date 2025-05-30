@@ -2,17 +2,7 @@
   <div class="app-container">
     <el-row :gutter="20">
       <splitpanes :horizontal="this.$store.getters.device === 'mobile'" class="default-theme">
-        <!--部门数据-->
-        <pane size="16">
-          <el-col>
-            <div class="head-container">
-              <el-input v-model="deptName" placeholder="请输入部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom: 20px" />
-            </div>
-            <div class="head-container">
-              <el-tree :data="deptOptions" :props="defaultProps" :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree" node-key="id" default-expand-all highlight-current @node-click="handleNodeClick" />
-            </div>
-          </el-col>
-        </pane>
+
         <!--用户数据-->
         <pane size="84">
           <el-col>
@@ -61,7 +51,6 @@
               <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
               <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
               <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-              <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
               <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
               <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
                 <template slot-scope="scope">
@@ -103,11 +92,7 @@
               <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="归属部门" prop="deptId">
-              <treeselect v-model="form.deptId" :options="enabledDeptOptions" :show-count="true" placeholder="请选择归属部门" />
-            </el-form-item>
-          </el-col>
+
         </el-row>
         <el-row>
           <el-col :span="12">
@@ -150,13 +135,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
-                <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1" ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
@@ -201,7 +180,7 @@
 </template>
 
 <script>
-import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus, deptTreeSelect } from "@/api/system/user";
+import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus } from "@/api/system/user";
 import { getToken } from "@/utils/auth";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -230,20 +209,6 @@ export default {
       userList: null,
       // 弹出层标题
       title: "",
-      // 所有部门树选项
-      deptOptions: undefined,
-      // 过滤掉已禁用部门树选项
-      enabledDeptOptions: undefined,
-      // 是否显示弹出层
-      open: false,
-      // 部门名称
-      deptName: undefined,
-      // 默认密码
-      initPassword: undefined,
-      // 日期范围
-      dateRange: [],
-      // 岗位选项
-      postOptions: [],
       // 角色选项
       roleOptions: [],
       // 表单参数
@@ -273,8 +238,7 @@ export default {
         pageSize: 10,
         userName: undefined,
         phonenumber: undefined,
-        status: undefined,
-        deptId: undefined
+        status: undefined
       },
       // 列信息
       columns: [
@@ -317,19 +281,7 @@ export default {
       }
     };
   },
-  watch: {
-    // 根据名称筛选部门树
-    deptName(val) {
-      this.$refs.tree.filter(val);
-    }
-  },
-  created() {
-    this.getList();
-    this.getDeptTree();
-    this.getConfigKey("sys.user.initPassword").then(response => {
-      this.initPassword = response.msg;
-    });
-  },
+
   methods: {
     /** 查询用户列表 */
     getList() {
@@ -341,35 +293,14 @@ export default {
         }
       );
     },
-    /** 查询部门下拉树结构 */
-    getDeptTree() {
-      deptTreeSelect().then(response => {
-        this.deptOptions = response.data;
-        this.enabledDeptOptions = this.filterDisabledDept(JSON.parse(JSON.stringify(response.data)));
-      });
-    },
-    // 过滤禁用的部门
-    filterDisabledDept(deptList) {
-      return deptList.filter(dept => {
-        if (dept.disabled) {
-          return false;
-        }
-        if (dept.children && dept.children.length) {
-          dept.children = this.filterDisabledDept(dept.children);
-        }
-        return true;
-      });
-    },
+
+
     // 筛选节点
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
     },
-    // 节点单击事件
-    handleNodeClick(data) {
-      this.queryParams.deptId = data.id;
-      this.handleQuery();
-    },
+
     // 用户状态修改
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
@@ -390,7 +321,6 @@ export default {
     reset() {
       this.form = {
         userId: undefined,
-        deptId: undefined,
         userName: undefined,
         nickName: undefined,
         password: undefined,
@@ -399,7 +329,6 @@ export default {
         sex: undefined,
         status: "0",
         remark: undefined,
-        postIds: [],
         roleIds: []
       };
       this.resetForm("form");
@@ -413,7 +342,6 @@ export default {
     resetQuery() {
       this.dateRange = [];
       this.resetForm("queryForm");
-      this.queryParams.deptId = undefined;
       this.$refs.tree.setCurrentKey(null);
       this.handleQuery();
     },
@@ -440,7 +368,6 @@ export default {
     handleAdd() {
       this.reset();
       getUser().then(response => {
-        this.postOptions = response.posts;
         this.roleOptions = response.roles;
         this.open = true;
         this.title = "添加用户";
@@ -453,10 +380,7 @@ export default {
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {
         this.form = response.data;
-        this.postOptions = response.posts;
         this.roleOptions = response.roles;
-        this.$set(this.form, "postIds", response.postIds);
-        this.$set(this.form, "roleIds", response.roleIds);
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";

@@ -36,15 +36,7 @@ public class DataScopeAspect
      */
     public static final String DATA_SCOPE_CUSTOM = "2";
 
-    /**
-     * 部门数据权限
-     */
-    public static final String DATA_SCOPE_DEPT = "3";
 
-    /**
-     * 部门及以下数据权限
-     */
-    public static final String DATA_SCOPE_DEPT_AND_CHILD = "4";
 
     /**
      * 仅本人数据权限
@@ -84,7 +76,6 @@ public class DataScopeAspect
      *
      * @param joinPoint 切点
      * @param user 用户
-     * @param deptAlias 部门别名
      * @param userAlias 用户别名
      * @param permission 权限字符
      */
@@ -128,14 +119,6 @@ public class DataScopeAspect
                 {
                     sqlString.append(StringUtils.format(" OR {}.dept_id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) ", deptAlias, role.getRoleId()));
                 }
-            }
-            else if (DATA_SCOPE_DEPT.equals(dataScope))
-            {
-                sqlString.append(StringUtils.format(" OR {}.dept_id = {} ", deptAlias, user.getDeptId()));
-            }
-            else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope))
-            {
-                sqlString.append(StringUtils.format(" OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) )", deptAlias, user.getDeptId(), user.getDeptId()));
             }
             else if (DATA_SCOPE_SELF.equals(dataScope))
             {

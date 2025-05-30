@@ -76,22 +76,6 @@ export const constantRoutes = [
   },
 
 
-// //音乐路由
-//   {
-//     path: '/music',
-//     component: Layout,
-//     hidden: false,
-//     children: [
-//       {
-//         path: 'music',
-//         name: 'Music',
-//         component: () => import('@/views/music/music/index2.vue'),
-//         meta: { title: '音乐管理', icon: 'music' }
-//       }
-//     ]
-//   },
-
-
 
 //音乐路由
   {

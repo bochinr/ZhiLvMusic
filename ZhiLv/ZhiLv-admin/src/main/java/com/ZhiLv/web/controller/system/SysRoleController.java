@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ZhiLv.common.annotation.Log;
 import com.ZhiLv.common.core.controller.BaseController;
 import com.ZhiLv.common.core.domain.AjaxResult;
-import com.ZhiLv.common.core.domain.entity.SysDept;
 import com.ZhiLv.common.core.domain.entity.SysRole;
 import com.ZhiLv.common.core.domain.entity.SysUser;
 import com.ZhiLv.common.core.domain.model.LoginUser;
@@ -27,7 +26,6 @@ import com.ZhiLv.common.utils.poi.ExcelUtil;
 import com.ZhiLv.framework.web.service.SysPermissionService;
 import com.ZhiLv.framework.web.service.TokenService;
 import com.ZhiLv.system.domain.SysUserRole;
-import com.ZhiLv.system.service.ISysDeptService;
 import com.ZhiLv.system.service.ISysRoleService;
 import com.ZhiLv.system.service.ISysUserService;
 
@@ -52,8 +50,6 @@ public class SysRoleController extends BaseController
     @Autowired
     private ISysUserService userService;
 
-    @Autowired
-    private ISysDeptService deptService;
 
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/list")
@@ -247,16 +243,4 @@ public class SysRoleController extends BaseController
         return toAjax(roleService.insertAuthUsers(roleId, userIds));
     }
 
-    /**
-     * 获取对应角色部门树列表
-     */
-    @PreAuthorize("@ss.hasPermi('system:role:query')")
-    @GetMapping(value = "/deptTree/{roleId}")
-    public AjaxResult deptTree(@PathVariable("roleId") Long roleId)
-    {
-        AjaxResult ajax = AjaxResult.success();
-        ajax.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));
-        ajax.put("depts", deptService.selectDeptTreeList(new SysDept()));
-        return ajax;
-    }
 }
