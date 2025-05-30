@@ -68,28 +68,12 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/index'),
+        component: () => import('@/views/index.vue'),
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
-
-
-// //音乐路由
-//   {
-//     path: '/music',
-//     component: Layout,
-//     hidden: false,
-//     children: [
-//       {
-//         path: 'music',
-//         name: 'Music',
-//         component: () => import('@/views/music/music/index2.vue'),
-//         meta: { title: '音乐管理', icon: 'music' }
-//       }
-//     ]
-//   },
 
 
 
@@ -108,7 +92,7 @@ export const constantRoutes = [
       {
         path: 'music',
         name: 'MusicList',
-        component: () => import('@/views/music/music/index3'),
+        component: () => import('@/views/music/music/index.vue'),
         meta: {
           title: '音乐信息',
           icon: 'list',

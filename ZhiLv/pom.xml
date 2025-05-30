@@ -218,12 +218,12 @@
                 <version>${ZhiLv.version}</version>
             </dependency>
 
-<!--            &lt;!&ndash; 音乐模块&ndash;&gt;-->
-<!--            <dependency>-->
-<!--                <groupId>com.ZhiLv</groupId>-->
-<!--                <artifactId>ZhiLv-Music</artifactId>-->
-<!--                <version>${ZhiLv.version}</version>-->
-<!--            </dependency>-->
+            <!-- 音乐模块-->
+            <dependency>
+                <groupId>com.ZhiLv</groupId>
+                <artifactId>ZhiLv-music</artifactId>
+                <version>${ZhiLv.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -234,6 +234,7 @@
         <module>ZhiLv-quartz</module>
         <module>ZhiLv-generator</module>
         <module>ZhiLv-common</module>
+        <module>ZhiLv-music</module>
     </modules>
     <packaging>pom</packaging>
 

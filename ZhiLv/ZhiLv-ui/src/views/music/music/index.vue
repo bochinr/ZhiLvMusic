@@ -97,10 +97,20 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="音乐ID" align="center" prop="musicId" />
       <el-table-column label="音乐标题" align="center" prop="title" />
-
+      <!-- 新增封面列 -->
+      <el-table-column label="封面" align="center" width="100">
+        <template slot-scope="scope">
+          <el-image
+            style="width: 50px; height: 50px"
+            :src="require('@/assets/images/music-default-cover.png')"
+            :preview-src-list="[require('@/assets/images/music-default-cover.png')]"
+            fit="cover"
+          ></el-image>
+        </template>
+      </el-table-column>
       <el-table-column label="艺术家" align="center" prop="artist" />
       <el-table-column label="专辑名称" align="center" prop="album" />
-      <el-table-column label="时长(s)" align="center" prop="duration" />
+      <el-table-column label="时长" align="center" prop="duration" />
       <el-table-column label="文件存储路径" align="center" prop="fileUrl" />
       <el-table-column label="上传用户ID" align="center" prop="uploadUserId" />
       <el-table-column label="上传时间" align="center" prop="uploadTime" width="180">
@@ -155,7 +165,7 @@
         <el-form-item label="专辑名称" prop="album">
           <el-input v-model="form.album" placeholder="请输入专辑名称" />
         </el-form-item>
-        <el-form-item label="时长(s)" prop="duration">
+        <el-form-item label="时长" prop="duration">
           <el-input v-model="form.duration" placeholder="请输入时长" />
         </el-form-item>
         <el-form-item label="文件存储路径" prop="fileUrl">
